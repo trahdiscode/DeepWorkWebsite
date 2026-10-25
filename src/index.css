@@ -59,6 +59,27 @@ html.lenis body {
 }
 
 @layer base {
+  html,
+  body,
+  *,
+  *::before,
+  *::after {
+    cursor: url('/cursor.png') 0 0, url('/cursor.svg') 0 0, auto !important;
+  }
+
+  a,
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  label,
+  .cursor-pointer,
+  a *,
+  button * {
+    cursor: url('/cursor.png') 0 0, url('/cursor.svg') 0 0, pointer !important;
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
     background: var(--color-void);
