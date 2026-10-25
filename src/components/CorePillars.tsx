@@ -1,4 +1,5 @@
 import { corePillars } from '../content';
+import { useTheme } from '../context/ThemeContext';
 
 function PillarGraphic({ step }: { step: string }) {
   switch (step) {
@@ -61,8 +62,15 @@ function PillarGraphic({ step }: { step: string }) {
 }
 
 export function CorePillars() {
+  const { isLight } = useTheme();
+
   return (
-    <section id="features" className="relative bg-[#000000] text-white py-28 px-4 sm:px-6 border-t border-[#432818]/60 overflow-hidden w-full max-w-full">
+    <section
+      id="features"
+      className={`relative py-28 px-4 sm:px-6 border-t overflow-hidden w-full max-w-full transition-colors duration-300 ${
+        isLight ? 'bg-[#faf7f2] text-[#20130b] border-[#bb9457]/20' : 'bg-[#000000] text-white border-[#432818]/60'
+      }`}
+    >
       <div className="max-w-6xl mx-auto space-y-16">
         {/* Section Header */}
         <div className="max-w-2xl space-y-3">
@@ -70,10 +78,10 @@ export function CorePillars() {
             <span className="size-1.5 rounded-full bg-[#bb9457]" />
             CORE DEFENSES
           </div>
-          <h2 className="font-display text-3xl sm:text-5xl tracking-wide text-white">
+          <h2 className={`font-display text-3xl sm:text-5xl tracking-wide transition-colors ${isLight ? 'text-[#20130b]' : 'text-white'}`}>
             Engineered to break the dopamine cycle.
           </h2>
-          <p className="font-sans text-sm sm:text-base text-neutral-400 leading-relaxed">
+          <p className={`font-sans text-sm sm:text-base leading-relaxed transition-colors ${isLight ? 'text-[#6b584c]' : 'text-neutral-400'}`}>
             Four active defense layers running completely offline on your device hardware.
           </p>
         </div>
@@ -83,14 +91,18 @@ export function CorePillars() {
           {corePillars.map((pillar) => (
             <div
               key={pillar.step}
-              className="rounded-2xl border border-[#432818] bg-gradient-to-b from-[#160e0a] to-[#0a0604] p-6 sm:p-10 flex flex-col justify-between transition-all duration-300 hover:border-[#bb9457]/70 hover:shadow-[0_0_30px_rgba(187,148,87,0.18)] group"
+              className={`rounded-2xl border p-6 sm:p-10 flex flex-col justify-between transition-all duration-300 group ${
+                isLight
+                  ? 'border-[#bb9457]/25 bg-gradient-to-b from-white to-[#f7f2ea] shadow-[0_10px_30px_rgba(67,40,24,0.04)] hover:border-[#bb9457] hover:shadow-[0_15px_35px_rgba(187,148,87,0.15)]'
+                  : 'border-[#432818] bg-gradient-to-b from-[#160e0a] to-[#0a0604] hover:border-[#bb9457]/70 hover:shadow-[0_0_30px_rgba(187,148,87,0.18)]'
+              }`}
             >
               {/* Card Header */}
-              <div className="flex items-center justify-between pb-6 border-b border-[#432818]/60 mb-6">
+              <div className={`flex items-center justify-between pb-6 border-b mb-6 ${isLight ? 'border-[#bb9457]/20' : 'border-[#432818]/60'}`}>
                 <div className="flex items-center gap-4">
                   <PillarGraphic step={pillar.step} />
                   <div>
-                    <span className="font-mono text-xs font-bold text-[#ffe6a7] tracking-widest block">
+                    <span className={`font-mono text-xs font-bold tracking-widest block ${isLight ? 'text-[#6f1d1b]' : 'text-[#ffe6a7]'}`}>
                       {pillar.step} // DEFENSE
                     </span>
                     <span className="font-mono text-[10px] text-[#bb9457] uppercase tracking-wider font-semibold">
@@ -102,17 +114,21 @@ export function CorePillars() {
 
               {/* Card Body */}
               <div className="space-y-3 my-auto">
-                <h3 className="font-display text-xl sm:text-2xl text-white font-bold group-hover:text-[#ffe6a7] transition-colors leading-snug">
+                <h3
+                  className={`font-display text-xl sm:text-2xl font-bold transition-colors leading-snug ${
+                    isLight ? 'text-[#20130b] group-hover:text-[#6f1d1b]' : 'text-white group-hover:text-[#ffe6a7]'
+                  }`}
+                >
                   {pillar.title}
                 </h3>
-                <p className="font-sans text-sm text-neutral-300 leading-relaxed">
+                <p className={`font-sans text-sm leading-relaxed transition-colors ${isLight ? 'text-[#432818]/85' : 'text-neutral-300'}`}>
                   {pillar.desc}
                 </p>
               </div>
 
               {/* Bottom Subtle Status Cue */}
-              <div className="pt-6 mt-6 border-t border-[#432818]/40 flex items-center justify-between font-mono text-[10px] text-neutral-500">
-                <span className="flex items-center gap-1.5 text-neutral-400">
+              <div className={`pt-6 mt-6 border-t flex items-center justify-between font-mono text-[10px] ${isLight ? 'border-[#bb9457]/20 text-[#6b584c]' : 'border-[#432818]/40 text-neutral-500'}`}>
+                <span className={`flex items-center gap-1.5 ${isLight ? 'text-[#432818]' : 'text-neutral-400'}`}>
                   <span className="size-1.5 rounded-full bg-[#bb9457]" />
                   SHIPPED ON GOOGLE PLAY
                 </span>

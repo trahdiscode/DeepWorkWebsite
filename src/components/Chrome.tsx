@@ -1,6 +1,7 @@
 import { useState, type MouseEvent } from 'react';
 import { brand, nav } from '../content';
 import { scrollToHash } from '../lib/scroll';
+import { useTheme } from '../context/ThemeContext';
 
 function go(e: MouseEvent<HTMLAnchorElement>, then?: () => void) {
   const hash = e.currentTarget.getAttribute('href');
@@ -28,6 +29,32 @@ function DeepWorkDiamond({ className = '' }: { className?: string }) {
   );
 }
 
+/** Sun Icon for Dark -> Light mode */
+export function SunIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="4" fill="currentColor" fillOpacity="0.25" />
+      <line x1="12" y1="2" x2="12" y2="4" />
+      <line x1="12" y1="20" x2="12" y2="22" />
+      <line x1="4.93" y1="4.93" x2="6.34" y2="6.34" />
+      <line x1="17.66" y1="17.66" x2="19.07" y2="19.07" />
+      <line x1="2" y1="12" x2="4" y2="12" />
+      <line x1="20" y1="12" x2="22" y2="12" />
+      <line x1="4.93" y1="19.07" x2="6.34" y2="17.66" />
+      <line x1="17.66" y1="6.34" x2="19.07" y2="4.93" />
+    </svg>
+  );
+}
+
+/** Moon Icon for Light -> Dark mode */
+export function MoonIcon({ className = '' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor" fillOpacity="0.25" />
+    </svg>
+  );
+}
+
 /** Google Play Store Icon */
 export function GooglePlayIcon({ className = '' }: { className?: string }) {
   return (
@@ -48,9 +75,16 @@ export function GitHubIcon({ className = '' }: { className?: string }) {
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { isLight, toggleTheme } = useTheme();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 text-white backdrop-blur-md bg-black/75 border-b border-[#432818]/60 transition-all w-full max-w-full">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 backdrop-blur-md transition-all duration-300 w-full max-w-full ${
+        isLight
+          ? 'bg-[#faf7f2]/90 border-b border-[#bb9457]/25 text-[#20130b] shadow-[0_4px_25px_rgba(67,40,24,0.05)]'
+          : 'bg-black/75 border-b border-[#432818]/60 text-white'
+      }`}
+    >
       <div className="flex items-center justify-between px-4 py-3.5 sm:px-6 md:px-8 max-w-6xl mx-auto w-full">
         {/* Brand */}
         <a
@@ -60,73 +94,161 @@ export function Header() {
           aria-label={`${brand.name} — back to top`}
         >
           <DeepWorkDiamond className="size-5 text-[#bb9457] group-hover:scale-105 transition-transform" />
-          <span className="font-display text-sm tracking-[0.24em] font-bold text-white group-hover:text-[#ffe6a7] transition-colors">
+          <span
+            className={`font-display text-sm tracking-[0.24em] font-bold transition-colors ${
+              isLight ? 'text-[#20130b] group-hover:text-[#6f1d1b]' : 'text-white group-hover:text-[#ffe6a7]'
+            }`}
+          >
             {brand.wordmark}
           </span>
         </a>
 
         {/* Desktop Nav */}
-        <nav aria-label="Primary" className="hidden items-center gap-7 md:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-6 md:flex">
           {nav.map((item) => (
             <a
               key={item.href}
               href={item.href}
               onClick={(e) => go(e)}
-              className="font-mono text-label text-neutral-300 hover:text-[#ffe6a7] uppercase transition-colors tracking-widest"
+              className={`font-mono text-label uppercase transition-colors tracking-widest ${
+                isLight ? 'text-[#432818]/80 hover:text-[#6f1d1b]' : 'text-neutral-300 hover:text-[#ffe6a7]'
+              }`}
             >
               {item.label}
             </a>
           ))}
 
+          {/* Theme Toggle Button */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className={`flex items-center gap-2 rounded-full px-3 py-1.5 font-mono text-xs font-semibold uppercase tracking-wider transition-all duration-300 border ${
+              isLight
+                ? 'border-[#bb9457]/40 bg-[#bb9457]/15 text-[#432818] hover:bg-[#bb9457]/30 shadow-sm'
+                : 'border-[#432818] bg-black/60 text-[#ffe6a7] hover:border-[#bb9457]/50 hover:bg-[#140d09]'
+            }`}
+            aria-label={`Switch to ${isLight ? 'Dark' : 'Light'} Mode`}
+            title={`Switch to ${isLight ? 'Dark' : 'Light'} Mode`}
+          >
+            {isLight ? (
+              <>
+                <MoonIcon className="size-3.5 text-[#6f1d1b]" />
+                <span className="text-[11px]">Dark Mode</span>
+              </>
+            ) : (
+              <>
+                <SunIcon className="size-3.5 text-[#ffe6a7]" />
+                <span className="text-[11px]">Light Mode</span>
+              </>
+            )}
+          </button>
+
           <a
             href={brand.playStoreUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 rounded-full bg-[#bb9457] hover:bg-[#99582a] text-[#432818] hover:text-[#ffe6a7] px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-[0_0_20px_rgba(187,148,87,0.3)]"
+            className={`flex items-center gap-2 rounded-full px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+              isLight
+                ? 'bg-[#432818] hover:bg-[#20130b] text-[#ffe6a7] hover:text-white shadow-[0_4px_18px_rgba(67,40,24,0.18)]'
+                : 'bg-[#bb9457] hover:bg-[#99582a] text-[#432818] hover:text-[#ffe6a7] shadow-[0_0_20px_rgba(187,148,87,0.3)]'
+            }`}
           >
             <GooglePlayIcon className="size-3.5" />
             <span>Google Play</span>
           </a>
         </nav>
 
-        {/* Mobile Hamburger Button */}
-        <button
-          type="button"
-          onClick={() => setOpen(!open)}
-          className="md:hidden p-2 text-neutral-400 hover:text-[#ffe6a7] focus:outline-none"
-          aria-label="Toggle navigation menu"
-        >
-          <svg className="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            {open ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        {/* Mobile Actions: Theme Switcher + Hamburger */}
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border text-xs font-mono transition-all ${
+              isLight
+                ? 'border-[#bb9457]/40 bg-[#bb9457]/15 text-[#432818]'
+                : 'border-[#432818] bg-black/60 text-[#ffe6a7]'
+            }`}
+            aria-label={`Switch to ${isLight ? 'Dark' : 'Light'} Mode`}
+          >
+            {isLight ? (
+              <>
+                <MoonIcon className="size-3.5 text-[#6f1d1b]" />
+                <span className="text-[10px] font-bold">Dark</span>
+              </>
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <>
+                <SunIcon className="size-3.5 text-[#ffe6a7]" />
+                <span className="text-[10px] font-bold">Light</span>
+              </>
             )}
-          </svg>
-        </button>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setOpen(!open)}
+            className={`p-2 focus:outline-none transition-colors ${
+              isLight ? 'text-[#432818] hover:text-[#6f1d1b]' : 'text-neutral-400 hover:text-[#ffe6a7]'
+            }`}
+            aria-label="Toggle navigation menu"
+          >
+            <svg className="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {open ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Mobile Drawer */}
       {open && (
-        <div className="md:hidden border-b border-[#432818] bg-black/95 backdrop-blur-xl px-4 py-6 space-y-4">
-          <nav className="flex flex-col gap-4 font-mono text-xs uppercase tracking-widest text-neutral-300">
+        <div
+          className={`md:hidden border-b px-4 py-6 space-y-4 backdrop-blur-xl transition-colors duration-300 ${
+            isLight ? 'border-[#bb9457]/20 bg-[#faf7f2]/98 text-[#20130b]' : 'border-[#432818] bg-black/95 text-neutral-300'
+          }`}
+        >
+          <nav className="flex flex-col gap-4 font-mono text-xs uppercase tracking-widest">
             {nav.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={(e) => go(e, () => setOpen(false))}
-                className="hover:text-[#ffe6a7] transition-colors py-1"
+                className={`py-1 transition-colors ${
+                  isLight ? 'text-[#432818] hover:text-[#6f1d1b]' : 'text-neutral-300 hover:text-[#ffe6a7]'
+                }`}
               >
                 {item.label}
               </a>
             ))}
           </nav>
-          <div className="pt-4 border-t border-[#432818]/60">
+
+          <div className="pt-4 border-t border-[#432818]/30 flex flex-col gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                toggleTheme();
+              }}
+              className={`flex items-center justify-center gap-2 rounded-full py-2.5 font-mono text-xs font-bold uppercase tracking-wider border transition-all ${
+                isLight
+                  ? 'border-[#bb9457]/40 bg-[#bb9457]/15 text-[#432818]'
+                  : 'border-[#432818] bg-[#140d09] text-[#ffe6a7]'
+              }`}
+            >
+              {isLight ? <MoonIcon className="size-4 text-[#6f1d1b]" /> : <SunIcon className="size-4 text-[#ffe6a7]" />}
+              <span>Switch to {isLight ? 'Dark Mode' : 'Light Mode'}</span>
+            </button>
+
             <a
               href={brand.playStoreUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 rounded-full bg-[#bb9457] hover:bg-[#99582a] text-[#432818] py-3 font-mono text-xs font-bold uppercase tracking-wider"
+              className={`flex items-center justify-center gap-2 rounded-full py-3 font-mono text-xs font-bold uppercase tracking-wider transition-all ${
+                isLight
+                  ? 'bg-[#432818] hover:bg-[#20130b] text-[#ffe6a7]'
+                  : 'bg-[#bb9457] hover:bg-[#99582a] text-[#432818]'
+              }`}
             >
               <GooglePlayIcon className="size-4" />
               <span>Get on Google Play</span>
@@ -139,17 +261,33 @@ export function Header() {
 }
 
 export function Footer() {
+  const { isLight } = useTheme();
+
   return (
-    <footer className="border-t border-[#432818]/80 bg-[#000000] text-neutral-400 py-12 px-4 sm:px-6 overflow-hidden w-full max-w-full">
+    <footer
+      className={`border-t py-12 px-4 sm:px-6 overflow-hidden w-full max-w-full transition-colors duration-300 ${
+        isLight ? 'border-[#bb9457]/20 bg-[#f5efe6] text-[#6b584c]' : 'border-[#432818]/80 bg-[#000000] text-neutral-400'
+      }`}
+    >
       <div className="max-w-6xl mx-auto space-y-8 w-full">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-[#432818]/40">
+        <div
+          className={`flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b ${
+            isLight ? 'border-[#bb9457]/20' : 'border-[#432818]/40'
+          }`}
+        >
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
             <DeepWorkDiamond className="size-5 text-[#bb9457] shrink-0" />
-            <span className="font-display text-sm tracking-[0.22em] font-bold text-white">
+            <span
+              className={`font-display text-sm tracking-[0.22em] font-bold ${
+                isLight ? 'text-[#20130b]' : 'text-white'
+              }`}
+            >
               {brand.wordmark}
             </span>
             <span className="text-[#99582a]">·</span>
-            <span className="text-xs font-mono text-neutral-400">Where silence meets absolute discipline.</span>
+            <span className={`text-xs font-mono ${isLight ? 'text-[#6b584c]' : 'text-neutral-400'}`}>
+              Where silence meets absolute discipline.
+            </span>
           </div>
 
           <div className="flex flex-wrap items-center gap-4 sm:gap-5 font-mono text-xs">
@@ -157,7 +295,9 @@ export function Footer() {
               href={brand.developer.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-neutral-300 hover:text-[#ffe6a7] transition-colors"
+              className={`flex items-center gap-1.5 transition-colors ${
+                isLight ? 'text-[#432818] hover:text-[#6f1d1b]' : 'text-neutral-300 hover:text-[#ffe6a7]'
+              }`}
             >
               <GitHubIcon className="size-4 shrink-0" />
               <span>{brand.developer.name}</span>
@@ -167,19 +307,27 @@ export function Footer() {
               href={brand.developer.repo}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-neutral-400 hover:text-[#ffe6a7] transition-colors"
+              className={`transition-colors ${
+                isLight ? 'text-[#6b584c] hover:text-[#6f1d1b]' : 'text-neutral-400 hover:text-[#ffe6a7]'
+              }`}
             >
               Source Repo
             </a>
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-neutral-500 text-center sm:text-left">
+        <div
+          className={`flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-center sm:text-left ${
+            isLight ? 'text-[#8c7769]' : 'text-neutral-500'
+          }`}
+        >
           <div>© {new Date().getFullYear()} DEEP WORK. Available on Google Play for Android 7+. Zero trackers.</div>
           <a
             href="#top"
             onClick={(e) => go(e)}
-            className="text-neutral-400 hover:text-[#ffe6a7] transition-colors whitespace-nowrap"
+            className={`transition-colors whitespace-nowrap ${
+              isLight ? 'text-[#432818] hover:text-[#6f1d1b]' : 'text-neutral-400 hover:text-[#ffe6a7]'
+            }`}
           >
             Back to Top ↑
           </a>
