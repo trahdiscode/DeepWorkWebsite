@@ -9,9 +9,9 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  theme: 'dark',
+  theme: 'light',
   toggleTheme: () => {},
-  isLight: false,
+  isLight: true,
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -20,7 +20,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       const saved = localStorage.getItem('deepwork_site_theme');
       if (saved === 'light' || saved === 'dark') return saved;
     }
-    return 'dark'; // Dark theme remains default
+    return 'light'; // White mode is now primary by default
   });
 
   useEffect(() => {

@@ -11,20 +11,65 @@ function go(e: MouseEvent<HTMLAnchorElement>, then?: () => void) {
   scrollToHash(hash);
 }
 
-/** Official Deep Work Focus Diamond Glyph */
-function DeepWorkDiamond({ className = '' }: { className?: string }) {
+/** Official Deep Work App Icon Logo Badge */
+export function DeepWorkLogo({
+  className = 'size-7.5',
+  isLight = false,
+}: {
+  className?: string;
+  isLight?: boolean;
+}) {
+  return (
+    <div
+      className={`relative rounded-[8px] p-1 flex items-center justify-center transition-all duration-300 shrink-0 ${
+        isLight
+          ? 'bg-gradient-to-b from-[#24160e] to-[#120905] border border-[#bb9457]/45 shadow-[0_2px_8px_rgba(67,40,24,0.14)] ring-1 ring-[#bb9457]/20'
+          : 'bg-gradient-to-b from-[#22150e] to-[#0d0603] border border-[#bb9457]/50 shadow-[0_0_12px_rgba(187,148,87,0.25)] ring-1 ring-black/60'
+      } ${className}`}
+    >
+      <svg viewBox="0 0 108 108" aria-hidden="true" className="w-full h-full overflow-visible">
+        {/* Subtle ambient diamond aura */}
+        <path d="M 54,20 L 88,54 L 54,88 L 20,54 Z" fill="rgba(187, 148, 87, 0.25)" />
+
+        {/* Outer geometric focus diamond with crisp gradient */}
+        <path
+          d="M 54,32 L 76,54 L 54,76 L 32,54 Z"
+          fill="none"
+          stroke="url(#focusDiamondGrad)"
+          strokeWidth="6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        {/* Solid inner core representing pure focus */}
+        <path d="M 54,46 L 62,54 L 54,62 L 46,54 Z" fill="#ffe6a7" />
+
+        <defs>
+          <linearGradient id="focusDiamondGrad" x1="32" y1="32" x2="76" y2="76" gradientUnits="userSpaceOnUse">
+            <stop stopColor="#ffe6a7" />
+            <stop offset="0.5" stopColor="#bb9457" />
+            <stop offset="1" stopColor="#99582a" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  );
+}
+
+/** Legacy Focus Diamond Glyph */
+export function DeepWorkDiamond({ className = '', isLight = false }: { className?: string; isLight?: boolean }) {
   return (
     <svg viewBox="0 0 108 108" aria-hidden="true" className={className}>
-      <path d="M 54,20 L 88,54 L 54,88 L 20,54 Z" fill="rgba(111, 29, 27, 0.35)" />
+      <path d="M 54,20 L 88,54 L 54,88 L 20,54 Z" fill={isLight ? 'rgba(187, 148, 87, 0.15)' : 'rgba(111, 29, 27, 0.35)'} />
       <path
         d="M 54,30 L 78,54 L 54,78 L 30,54 Z"
         fill="none"
-        stroke="#bb9457"
-        strokeWidth="4"
+        stroke={isLight ? '#432818' : '#bb9457'}
+        strokeWidth="5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path d="M 54,46 L 62,54 L 54,62 L 46,54 Z" fill="#ffe6a7" />
+      <path d="M 54,46 L 62,54 L 54,62 L 46,54 Z" fill={isLight ? '#6f1d1b' : '#ffe6a7'} />
     </svg>
   );
 }
@@ -90,10 +135,10 @@ export function Header() {
         <a
           href="#top"
           onClick={(e) => go(e)}
-          className="flex items-center gap-2.5 group"
+          className="flex items-center gap-2.5 sm:gap-3 group"
           aria-label={`${brand.name} — back to top`}
         >
-          <DeepWorkDiamond className="size-5 text-[#bb9457] group-hover:scale-105 transition-transform" />
+          <DeepWorkLogo className="size-7 sm:size-8 group-hover:scale-105 transition-transform" isLight={isLight} />
           <span
             className={`font-display text-sm tracking-[0.24em] font-bold transition-colors ${
               isLight ? 'text-[#20130b] group-hover:text-[#6f1d1b]' : 'text-white group-hover:text-[#ffe6a7]'
@@ -275,8 +320,8 @@ export function Footer() {
             isLight ? 'border-[#bb9457]/20' : 'border-[#432818]/40'
           }`}
         >
-          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-            <DeepWorkDiamond className="size-5 text-[#bb9457] shrink-0" />
+          <div className="flex flex-wrap items-center gap-2.5">
+            <DeepWorkLogo className="size-6 sm:size-6.5" isLight={isLight} />
             <span
               className={`font-display text-sm tracking-[0.22em] font-bold ${
                 isLight ? 'text-[#20130b]' : 'text-white'

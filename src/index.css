@@ -81,21 +81,21 @@ html.lenis body {
 
   html {
     -webkit-text-size-adjust: 100%;
-    background: var(--color-void);
+    background: #faf7f2;
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
     transition: background-color 0.3s ease;
   }
 
-  html.light {
-    background: #faf7f2;
+  html.dark {
+    background: #000000;
   }
 
   body {
     margin: 0;
-    background: var(--color-void);
-    color: var(--color-regolith);
+    background: #faf7f2;
+    color: #20130b;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -106,9 +106,9 @@ html.lenis body {
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  html.light body {
-    background: #faf7f2;
-    color: #20130b;
+  html.dark body {
+    background: #000000;
+    color: var(--color-regolith);
   }
 
   #root {
@@ -119,17 +119,17 @@ html.lenis body {
     transition: background-color 0.3s ease;
   }
 
-  html.light #root {
-    background: #faf7f2;
+  html.dark #root {
+    background: #000000;
   }
 
   ::selection {
-    background: rgba(212, 163, 115, 0.35);
-    color: #ffffff;
-  }
-
-  html.light ::selection {
     background: rgba(187, 148, 87, 0.35);
     color: #20130b;
+  }
+
+  html.dark ::selection {
+    background: rgba(212, 163, 115, 0.35);
+    color: #ffffff;
   }
 }
