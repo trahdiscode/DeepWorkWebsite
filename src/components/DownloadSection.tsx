@@ -23,7 +23,7 @@ export function DownloadSection() {
         </h2>
 
         <p className="font-sans text-sm sm:text-base text-neutral-300 max-w-lg mx-auto leading-relaxed">
-          100% offline, zero accounts, and zero internet permissions. Install directly on your device from Google Play.
+          100% offline, zero accounts, and zero telemetry. Install directly on your device from Google Play.
         </p>
 
         {/* Big Google Play CTA in Warm Camel */}
@@ -43,7 +43,7 @@ export function DownloadSection() {
         <div className="pt-6 border-t border-[#432818]/80 flex flex-wrap items-center justify-center gap-6 font-mono text-xs text-neutral-400">
           <span>COMPATIBILITY: ANDROID 7.0+</span>
           <span>SIZE: &lt; 15 MB</span>
-          <span>PERMISSIONS: ZERO (OFFLINE)</span>
+          <span>DATA PRIVACY: ZERO TRACKING</span>
         </div>
       </div>
     </section>

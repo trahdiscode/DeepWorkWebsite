@@ -85,7 +85,7 @@ export function Hero() {
 
         {/* Micro Specs strip */}
         <div className="pt-6 flex flex-wrap items-center justify-center gap-6 sm:gap-10 font-mono text-xs text-neutral-400">
-          <span className="hover:text-[#ffe6a7] transition-colors">● ZERO PERMISSIONS</span>
+          <span className="hover:text-[#ffe6a7] transition-colors">● ZERO DATA COLLECTION</span>
           <span className="hover:text-[#ffe6a7] transition-colors">● 100% OFFLINE</span>
           <span className="hover:text-[#ffe6a7] transition-colors">● NO ACCOUNTS</span>
           <span className="hover:text-[#ffe6a7] transition-colors">● FREE ON GOOGLE PLAY</span>
