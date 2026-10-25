@@ -64,7 +64,7 @@ html.lenis body {
   *,
   *::before,
   *::after {
-    cursor: url('/cursor.png') 0 0, url('/cursor.svg') 0 0, auto !important;
+    cursor: url('/cursor.png?v=2') 0 0, url('/cursor.svg?v=2') 0 0, auto !important;
   }
 
   a,
@@ -77,7 +77,7 @@ html.lenis body {
   .cursor-pointer,
   a *,
   button * {
-    cursor: url('/cursor.png') 0 0, url('/cursor.svg') 0 0, pointer !important;
+    cursor: url('/cursor.png?v=2') 0 0, url('/cursor.svg?v=2') 0 0, pointer !important;
   }
 
   html {
