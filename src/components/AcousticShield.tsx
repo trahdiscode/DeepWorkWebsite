@@ -3,36 +3,78 @@ import { audioTracks } from '../content';
 
 export function AcousticShield() {
   const [activeTrack, setActiveTrack] = useState<string | null>(null);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [volume, setVolume] = useState<number>(0.75);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.7);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Stop/play when active track changes
   useEffect(() => {
-    if (!audioRef.current) return;
-    if (activeTrack) {
-      const track = audioTracks.find((t) => t.id === activeTrack);
-      if (track) {
-        audioRef.current.src = track.file;
-        audioRef.current.loop = true;
-        audioRef.current.volume = volume;
-        audioRef.current
-          .play()
-          .then(() => setIsPlaying(true))
-          .catch(() => setIsPlaying(false));
-      }
-    } else {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
-  }, [activeTrack]);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-  // Adjust volume
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume;
-    }
-  }, [volume]);
+    let animId: number;
+    let width = (canvas.width = canvas.offsetWidth || 800);
+    let height = (canvas.height = canvas.offsetHeight || 120);
+
+    const onResize = () => {
+      if (!canvas) return;
+      width = canvas.width = canvas.offsetWidth || 800;
+      height = canvas.height = canvas.offsetHeight || 120;
+    };
+    window.addEventListener('resize', onResize);
+
+    let phase = 0;
+    const render = () => {
+      phase += isPlaying ? 0.08 : 0.015;
+      ctx.clearRect(0, 0, width, height);
+
+      const amp = isPlaying ? 28 * volume : 4;
+      const centerY = height / 2;
+
+      // Draw 3 harmonic ribbons in Camel, Light Apricot & Chocolate Brown
+      const lines = [
+        { color: 'rgba(187, 148, 87, 0.9)', speed: 1, freq: 0.015, width: 2.5 },
+        { color: 'rgba(255, 230, 167, 0.65)', speed: 1.4, freq: 0.02, width: 1.5 },
+        { color: 'rgba(153, 88, 42, 0.5)', speed: 0.7, freq: 0.01, width: 1 },
+      ];
+
+      lines.forEach((line) => {
+        ctx.beginPath();
+        ctx.strokeStyle = line.color;
+        ctx.lineWidth = line.width;
+        ctx.shadowBlur = isPlaying ? 10 : 0;
+        ctx.shadowColor = line.color;
+
+        for (let x = 0; x < width; x += 4) {
+          const envelope = Math.sin((x / width) * Math.PI);
+          const y =
+            centerY +
+            Math.sin(x * line.freq + phase * line.speed) *
+              Math.cos(x * 0.005 + phase * 0.5) *
+              amp *
+              envelope;
+
+          if (x === 0) {
+            ctx.moveTo(x, y);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        }
+        ctx.stroke();
+      });
+
+      animId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [isPlaying, volume]);
 
   const toggleTrack = (id: string) => {
     if (activeTrack === id) {
@@ -45,50 +87,59 @@ export function AcousticShield() {
       }
     } else {
       setActiveTrack(id);
+      setIsPlaying(true);
+      const track = audioTracks.find((t) => t.id === id);
+      if (track && audioRef.current) {
+        audioRef.current.src = track.file;
+        audioRef.current.volume = volume;
+        audioRef.current.loop = true;
+        audioRef.current.play().catch(() => {
+          setIsPlaying(false);
+        });
+      }
     }
   };
 
-  return (
-    <section id="acoustic" className="relative bg-[#05070c] text-white py-24 px-4 sm:px-8 border-t border-white/5 overflow-hidden">
-      {/* Background glow */}
-      <div
-        aria-hidden="true"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-radial from-amber-500/10 via-cyan-500/5 to-transparent blur-[120px] pointer-events-none"
-      />
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+    }
+  }, [volume]);
 
+  return (
+    <section id="sounds" className="relative bg-[#000000] text-white py-28 px-4 sm:px-6 border-t border-[#432818]/60">
       <audio ref={audioRef} preload="none" />
 
-      <div className="max-w-7xl mx-auto relative z-10 space-y-12">
-        {/* Section Title */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-8 gap-6">
+      <div className="max-w-6xl mx-auto space-y-12">
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#432818]/60 pb-8 gap-6">
           <div className="space-y-3">
-            <div className="font-mono text-xs font-semibold tracking-[0.3em] text-cyan-400 uppercase flex items-center gap-2">
-              <span className="size-2 rounded-full bg-cyan-400 animate-pulse" />
-              ACOUSTIC RESONANCE ENGINE
+            <div className="font-mono text-xs font-semibold tracking-[0.25em] text-[#bb9457] uppercase flex items-center gap-2">
+              <span className="size-1.5 rounded-full bg-[#bb9457]" />
+              OFFLINE AUDIO SYNTHESIZER
             </div>
             <h2 className="font-display text-3xl sm:text-5xl tracking-wide text-white">
-              Test the soundscapes that seal off the world.
+              The soundscapes that seal off the world.
             </h2>
           </div>
-          <p className="font-sans text-sm text-neutral-400 max-w-md leading-relaxed">
-            Click any frequency below to sample the offline sound synthesizer bundled directly inside the Deep Work APK.
+          <p className="font-sans text-sm text-neutral-400 max-w-sm leading-relaxed">
+            Click any frequency below to sample the built-in sound engine with real-time waveform synthesis.
           </p>
         </div>
 
-        {/* Console & Soundwave HUD */}
-        <div className="rounded-2xl border border-white/10 bg-[#0b0f18]/90 backdrop-blur-xl p-6 sm:p-10 shadow-2xl space-y-8">
-          {/* Top Status Bar */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4 font-mono text-xs text-neutral-400">
+        {/* Minimal Player Container with Live Waveform Canvas */}
+        <div className="rounded-3xl border border-[#432818]/80 bg-[#140d09]/90 backdrop-blur-xl p-6 sm:p-10 space-y-8 shadow-2xl">
+          {/* Status & Volume Strip */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#432818]/60 gap-4 font-mono text-xs">
             <div className="flex items-center gap-3">
-              <span className={`size-2.5 rounded-full ${isPlaying ? 'bg-emerald-400 shadow-[0_0_10px_#10b981] animate-ping' : 'bg-neutral-600'}`} />
-              <span className="text-white font-bold tracking-widest">
-                {isPlaying ? `TRANSMITTING: ${activeTrack?.toUpperCase()}` : 'ENGINE IDLE // SELECT FREQUENCY'}
+              <span className={`size-2.5 rounded-full ${isPlaying ? 'bg-[#bb9457] animate-pulse' : 'bg-neutral-600'}`} />
+              <span className="text-white font-medium tracking-wider">
+                {isPlaying ? `SYNTHESIZING: ${activeTrack?.toUpperCase()} FREQUENCY` : 'ENGINE STANDBY • SELECT A FREQUENCY'}
               </span>
             </div>
 
-            {/* Volume Control */}
-            <div className="flex items-center gap-3">
-              <span className="text-[10px] text-neutral-400 uppercase">SYNTH LEVEL:</span>
+            <div className="flex items-center gap-3 text-neutral-400">
+              <span className="text-[10px] uppercase">LEVEL:</span>
               <input
                 type="range"
                 min="0"
@@ -96,34 +147,21 @@ export function AcousticShield() {
                 step="0.05"
                 value={volume}
                 onChange={(e) => setVolume(parseFloat(e.target.value))}
-                className="w-28 accent-amber-500 cursor-pointer"
+                className="w-28 accent-[#bb9457] cursor-pointer"
                 aria-label="Volume slider"
               />
-              <span className="w-8 text-right font-mono text-white text-[11px]">
+              <span className="w-8 text-right font-mono text-[#ffe6a7] text-[11px]">
                 {Math.round(volume * 100)}%
               </span>
             </div>
           </div>
 
-          {/* Sound Wave Graphic Simulation */}
-          <div className="h-20 sm:h-24 rounded-lg bg-black/60 border border-white/5 flex items-center justify-center px-4 gap-1 sm:gap-1.5 overflow-hidden">
-            {Array.from({ length: 48 }).map((_, i) => {
-              const active = isPlaying;
-              const heightMultiplier = active ? (Math.sin(i * 0.35 + Date.now() * 0.003) * 0.5 + 0.5) : 0.15;
-              const barHeight = Math.max(8, heightMultiplier * 70);
-              return (
-                <div
-                  key={i}
-                  className={`w-1 sm:w-1.5 rounded-full transition-all duration-150 ${
-                    active ? 'bg-gradient-to-t from-amber-500 to-cyan-400 shadow-[0_0_8px_rgba(245,158,11,0.4)]' : 'bg-white/10'
-                  }`}
-                  style={{ height: `${barHeight}px` }}
-                />
-              );
-            })}
+          {/* Living Fluid Audio Waveform Canvas */}
+          <div className="h-28 w-full rounded-2xl bg-black/80 border border-[#432818] relative overflow-hidden flex items-center justify-center">
+            <canvas ref={canvasRef} className="w-full h-full" />
           </div>
 
-          {/* 4 Interactive Audio Track Cards */}
+          {/* 4 Interactive Track Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {audioTracks.map((track) => {
               const isActive = activeTrack === track.id && isPlaying;
@@ -132,33 +170,31 @@ export function AcousticShield() {
                   key={track.id}
                   type="button"
                   onClick={() => toggleTrack(track.id)}
-                  className={`text-left p-5 rounded-xl border transition-all duration-300 relative group overflow-hidden ${
+                  className={`text-left p-5 rounded-2xl border transition-all duration-300 group ${
                     isActive
-                      ? 'border-amber-500 bg-amber-500/10 shadow-[0_0_25px_rgba(245,158,11,0.25)]'
-                      : 'border-white/10 bg-white/5 hover:border-white/30 hover:bg-white/10'
+                      ? 'border-[#bb9457] bg-[#bb9457]/20 shadow-[0_0_25px_rgba(187,148,87,0.3)] scale-102'
+                      : 'border-[#432818]/60 bg-[#1c120c]/60 hover:border-[#bb9457]/50 hover:bg-[#1c120c] hover:scale-101'
                   }`}
                 >
-                  <div className="flex items-center justify-between font-mono text-[10px] tracking-widest text-neutral-400 mb-3">
-                    <span className="px-2 py-0.5 rounded bg-black/40 border border-white/10">
-                      {track.type}
-                    </span>
-                    <span className={isActive ? 'text-amber-400 font-bold' : 'text-neutral-500'}>
-                      {isActive ? '● PLAYING' : 'READY'}
+                  <div className="flex items-center justify-between text-[10px] font-mono text-neutral-400 mb-2.5">
+                    <span className="px-2 py-0.5 rounded bg-black/60 border border-[#432818] text-[#ffe6a7]">{track.badge}</span>
+                    <span className={isActive ? 'text-[#ffe6a7] font-bold' : 'text-neutral-500'}>
+                      {isActive ? '● ACTIVE' : 'STANDBY'}
                     </span>
                   </div>
 
-                  <h3 className="font-display text-lg text-white font-bold group-hover:text-amber-400 transition-colors">
+                  <h3 className="font-display text-base text-white font-bold group-hover:text-[#ffe6a7] transition-colors">
                     {track.title}
                   </h3>
-                  <p className="mt-2 text-xs text-neutral-300 font-sans leading-relaxed">
+                  <p className="mt-1.5 text-xs text-neutral-300 font-sans leading-relaxed">
                     {track.sub}
                   </p>
 
-                  <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono">
-                    <span className="text-amber-400/90 font-medium">
-                      {isActive ? 'Click to Pause' : 'Click to Engage'}
+                  <div className="mt-5 pt-3 border-t border-[#432818]/60 flex items-center justify-between text-[11px] font-mono">
+                    <span className="text-[#bb9457] font-medium group-hover:text-[#ffe6a7] transition-colors">
+                      {isActive ? 'Pause Soundscape' : 'Engage Freq'}
                     </span>
-                    <span className="size-5 rounded-full bg-white/10 flex items-center justify-center text-white text-[10px]">
+                    <span className="size-6 rounded-full bg-white/10 flex items-center justify-center text-white text-[11px] group-hover:bg-[#bb9457] group-hover:text-[#20130b] transition-colors">
                       {isActive ? '❚❚' : '▶'}
                     </span>
                   </div>

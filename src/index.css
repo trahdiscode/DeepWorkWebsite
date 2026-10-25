@@ -23,7 +23,12 @@ html.lenis body {
   --font-sans: "Space Grotesk", "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, Menlo, monospace;
 
-  --color-void: #05070c;
+  --color-void: #000000;
+  --color-dark-wine: #6f1d1b;
+  --color-camel: #bb9457;
+  --color-dark-coffee: #432818;
+  --color-chocolate-brown: #99582a;
+  --color-light-apricot: #ffe6a7;
   --color-void-2: #0b0f18;
   --color-void-3: #121826;
   --color-regolith: #c9ccd3;
@@ -68,78 +73,7 @@ html.lenis body {
     overflow-x: clip;
   }
   ::selection {
-    background: var(--color-amber-flow);
-    color: var(--color-void);
+    background: rgba(212, 163, 115, 0.35);
+    color: #ffffff;
   }
-  :focus-visible {
-    outline: 1.5px solid var(--color-amber-flow);
-    outline-offset: 3px;
-    border-radius: 4px;
-  }
-}
-
-@layer utilities {
-  .h-screen-s {
-    height: 100svh;
-  }
-
-  /* HUD corner brackets */
-  .brackets {
-    background:
-      linear-gradient(currentColor, currentColor) top left / 14px 1px,
-      linear-gradient(currentColor, currentColor) top left / 1px 14px,
-      linear-gradient(currentColor, currentColor) top right / 14px 1px,
-      linear-gradient(currentColor, currentColor) top right / 1px 14px,
-      linear-gradient(currentColor, currentColor) bottom left / 14px 1px,
-      linear-gradient(currentColor, currentColor) bottom left / 1px 14px,
-      linear-gradient(currentColor, currentColor) bottom right / 14px 1px,
-      linear-gradient(currentColor, currentColor) bottom right / 1px 14px;
-    background-repeat: no-repeat;
-  }
-
-  /* Cyber Monastic laser grid */
-  .geometric-matrix {
-    background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-    background-size: 60px 60px;
-    background-position: center center;
-  }
-
-  .dot-matrix {
-    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-    background-size: 24px 24px;
-  }
-
-  [data-reveal] {
-    opacity: 0;
-    transform: translate3d(0, 24px, 0);
-    transition:
-      opacity 0.9s cubic-bezier(0.2, 0.7, 0.1, 1),
-      transform 0.9s cubic-bezier(0.2, 0.7, 0.1, 1);
-  }
-  [data-reveal].is-in {
-    opacity: 1;
-    transform: none;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    [data-reveal] {
-      transform: none;
-    }
-  }
-}
-
-@keyframes pulse-slow {
-  0%, 100% {
-    opacity: 0.35;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.65;
-    transform: scale(1.03);
-  }
-}
-
-.animate-pulse-slow {
-  animation: pulse-slow 8s ease-in-out infinite;
 }

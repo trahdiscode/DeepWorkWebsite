@@ -1,12 +1,10 @@
 import { useEffect } from 'react';
 import { Header, Footer } from './components/Chrome';
 import { Hero } from './components/Hero';
-import { Protocols } from './components/Protocols';
-import { Aesthetics } from './components/Aesthetics';
-import { FeaturesMatrix } from './components/FeaturesMatrix';
+import { ThemeShowcase } from './components/ThemeShowcase';
+import { CorePillars } from './components/CorePillars';
 import { AcousticShield } from './components/AcousticShield';
-import { Trajectory } from './components/Trajectory';
-import { Access } from './components/Access';
+import { DownloadSection } from './components/DownloadSection';
 import { useReducedMotion } from './hooks/useReducedMotion';
 import { startScroll } from './lib/scroll';
 
@@ -21,14 +19,12 @@ export default function App() {
   return (
     <>
       <Header />
-      <main>
+      <main className="relative z-10">
         <Hero />
-        <Protocols />
-        <Aesthetics />
-        <FeaturesMatrix />
+        <ThemeShowcase />
+        <CorePillars />
         <AcousticShield />
-        <Trajectory />
-        <Access />
+        <DownloadSection />
       </main>
       <Footer />
     </>

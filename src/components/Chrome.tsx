@@ -14,19 +14,16 @@ function go(e: MouseEvent<HTMLAnchorElement>, then?: () => void) {
 function DeepWorkDiamond({ className = '' }: { className?: string }) {
   return (
     <svg viewBox="0 0 108 108" aria-hidden="true" className={className}>
-      {/* Outer ambient diamond */}
-      <path d="M 54,20 L 88,54 L 54,88 L 20,54 Z" fill="rgba(212, 163, 115, 0.15)" />
-      {/* Main geometric diamond */}
+      <path d="M 54,20 L 88,54 L 54,88 L 20,54 Z" fill="rgba(111, 29, 27, 0.35)" />
       <path
         d="M 54,30 L 78,54 L 54,78 L 30,54 Z"
         fill="none"
-        stroke="#D4A373"
+        stroke="#bb9457"
         strokeWidth="4"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      {/* Inner core */}
-      <path d="M 54,46 L 62,54 L 54,62 L 46,54 Z" fill="#F4E6C3" />
+      <path d="M 54,46 L 62,54 L 54,62 L 46,54 Z" fill="#ffe6a7" />
     </svg>
   );
 }
@@ -53,24 +50,19 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 text-white backdrop-blur-md bg-black/50 border-b border-white/5 transition-all">
-      <div className="flex items-center justify-between px-4 py-3 sm:px-6 md:px-8 max-w-7xl mx-auto">
+    <header className="fixed inset-x-0 top-0 z-50 text-white backdrop-blur-md bg-black/75 border-b border-[#432818]/60 transition-all">
+      <div className="flex items-center justify-between px-4 py-3.5 sm:px-6 md:px-8 max-w-6xl mx-auto">
         {/* Brand */}
         <a
           href="#top"
           onClick={(e) => go(e)}
-          className="flex items-center gap-3 group"
+          className="flex items-center gap-2.5 group"
           aria-label={`${brand.name} — back to top`}
         >
-          <DeepWorkDiamond className="size-6 text-[#D4A373] group-hover:scale-110 transition-transform duration-300" />
-          <div className="flex flex-col">
-            <span className="font-display text-sm md:text-base tracking-[0.24em] font-bold text-white group-hover:text-[#D4A373] transition-colors">
-              {brand.wordmark}
-            </span>
-            <span className="font-mono text-[9px] tracking-[0.18em] text-neutral-400 hidden sm:inline">
-              {brand.badge}
-            </span>
-          </div>
+          <DeepWorkDiamond className="size-5 text-[#bb9457] group-hover:scale-105 transition-transform" />
+          <span className="font-display text-sm tracking-[0.24em] font-bold text-white group-hover:text-[#ffe6a7] transition-colors">
+            {brand.wordmark}
+          </span>
         </a>
 
         {/* Desktop Nav */}
@@ -80,7 +72,7 @@ export function Header() {
               key={item.href}
               href={item.href}
               onClick={(e) => go(e)}
-              className="font-mono text-label text-neutral-300 hover:text-[#D4A373] uppercase transition-colors tracking-widest"
+              className="font-mono text-label text-neutral-300 hover:text-[#ffe6a7] uppercase transition-colors tracking-widest"
             >
               {item.label}
             </a>
@@ -90,7 +82,7 @@ export function Header() {
             href={brand.playStoreUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 rounded-[4px] bg-[#D4A373] hover:bg-[#e4b585] text-black px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider transition-all duration-200 hover:shadow-[0_0_15px_rgba(212,163,115,0.4)] active:scale-95"
+            className="flex items-center gap-2 rounded-full bg-[#bb9457] hover:bg-[#99582a] text-[#432818] hover:text-[#ffe6a7] px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-[0_0_20px_rgba(187,148,87,0.3)]"
           >
             <GooglePlayIcon className="size-3.5" />
             <span>Google Play</span>
@@ -101,38 +93,40 @@ export function Header() {
         <button
           type="button"
           onClick={() => setOpen(!open)}
-          className="md:hidden p-2 text-neutral-400 hover:text-white focus:outline-none"
+          className="md:hidden p-2 text-neutral-400 hover:text-[#ffe6a7] focus:outline-none"
           aria-label="Toggle navigation menu"
         >
           <svg className="size-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             {open ? (
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             )}
           </svg>
         </button>
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* Mobile Drawer */}
       {open && (
-        <div className="md:hidden border-b border-neutral-800 bg-[#090b10]/95 px-6 py-6 backdrop-blur-xl animate-in fade-in slide-in-from-top-4">
-          <div className="flex flex-col gap-5">
+        <div className="md:hidden border-b border-[#432818] bg-black/95 backdrop-blur-xl px-4 py-6 space-y-4">
+          <nav className="flex flex-col gap-4 font-mono text-xs uppercase tracking-widest text-neutral-300">
             {nav.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={(e) => go(e, () => setOpen(false))}
-                className="font-mono text-sm tracking-widest text-neutral-300 hover:text-[#D4A373] uppercase py-1"
+                className="hover:text-[#ffe6a7] transition-colors py-1"
               >
                 {item.label}
               </a>
             ))}
+          </nav>
+          <div className="pt-4 border-t border-[#432818]/60">
             <a
               href={brand.playStoreUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 flex items-center justify-center gap-2 rounded-[4px] bg-[#D4A373] py-3 font-mono text-xs font-bold uppercase text-black tracking-widest"
+              className="flex items-center justify-center gap-2 rounded-full bg-[#bb9457] hover:bg-[#99582a] text-[#432818] py-3 font-mono text-xs font-bold uppercase tracking-wider"
             >
               <GooglePlayIcon className="size-4" />
               <span>Get on Google Play</span>
@@ -146,97 +140,48 @@ export function Header() {
 
 export function Footer() {
   return (
-    <footer className="border-t border-neutral-800/80 bg-[#05070c] text-neutral-400 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 md:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-neutral-800/60">
-          {/* Col 1 */}
-          <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <DeepWorkDiamond className="size-5 text-[#D4A373]" />
-              <span className="font-display text-sm tracking-[0.24em] font-bold text-white">
-                {brand.wordmark}
-              </span>
-            </div>
-            <p className="text-xs font-mono text-neutral-400 leading-relaxed">
-              Where silence meets absolute discipline. Offline cognitive defense system published on Google Play.
-            </p>
-            <div className="font-mono text-[10px] text-[#D4A373] tracking-widest">
-              [ {brand.version} ]
-            </div>
+    <footer className="border-t border-[#432818]/80 bg-[#000000] text-neutral-400 py-12 px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto space-y-8">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-[#432818]/40">
+          <div className="flex items-center gap-2.5">
+            <DeepWorkDiamond className="size-5 text-[#bb9457]" />
+            <span className="font-display text-sm tracking-[0.22em] font-bold text-white">
+              {brand.wordmark}
+            </span>
+            <span className="text-[#99582a]">·</span>
+            <span className="text-xs font-mono text-neutral-400">Where silence meets absolute discipline.</span>
           </div>
 
-          {/* Col 2 */}
-          <div className="space-y-2">
-            <div className="font-mono text-xs uppercase tracking-widest text-neutral-300">App Themes</div>
-            <ul className="space-y-1.5 text-xs font-mono">
-              <li><a href="#themes" className="hover:text-[#D4A373] transition-colors">Espresso (Warm Monastic)</a></li>
-              <li><a href="#themes" className="hover:text-[#D4A373] transition-colors">Aurora (Nordic Slate)</a></li>
-              <li><a href="#themes" className="hover:text-[#D4A373] transition-colors">Blush / Noir (Porcelain Light)</a></li>
-              <li><a href="#themes" className="hover:text-[#D4A373] transition-colors">Nothing OS Inspired (Dot Matrix)</a></li>
-            </ul>
-          </div>
-
-          {/* Col 3: Developer Details */}
-          <div className="space-y-3">
-            <div className="font-mono text-xs uppercase tracking-widest text-neutral-300">Developer</div>
-            <div className="space-y-2 text-xs font-mono">
-              <div className="text-white font-medium">{brand.developer.name}</div>
-              <a
-                href={brand.developer.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-neutral-300 hover:text-[#D4A373] transition-colors"
-              >
-                <GitHubIcon className="size-4" />
-                <span>github.com/trahdiscode</span>
-              </a>
-              <a
-                href={brand.developer.repo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors text-[11px]"
-              >
-                <span>Source: trahdiscode/DeepWorkApp</span>
-                <span aria-hidden="true">↗</span>
-              </a>
-            </div>
-          </div>
-
-          {/* Col 4: Store & Compatibility */}
-          <div className="space-y-3">
-            <div className="font-mono text-xs uppercase tracking-widest text-neutral-300">Get App</div>
+          <div className="flex items-center gap-5 font-mono text-xs">
             <a
-              href={brand.playStoreUrl}
+              href={brand.developer.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2.5 rounded border border-white/20 bg-black/60 px-4 py-2 text-white hover:border-[#D4A373] hover:text-[#D4A373] transition-all"
+              className="flex items-center gap-1.5 text-neutral-300 hover:text-[#ffe6a7] transition-colors"
             >
-              <GooglePlayIcon className="size-4" />
-              <div className="text-left">
-                <div className="text-[9px] font-mono uppercase leading-none text-neutral-400">Get it on</div>
-                <div className="text-xs font-bold leading-tight">Google Play</div>
-              </div>
+              <GitHubIcon className="size-4" />
+              <span>{brand.developer.name}</span>
             </a>
-            <div className="font-mono text-[11px] text-neutral-400">
-              AVAILABLE FOR ANDROID 7+
-            </div>
+            <span className="text-[#99582a]">·</span>
+            <a
+              href={brand.developer.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-neutral-400 hover:text-[#ffe6a7] transition-colors"
+            >
+              Source Repo
+            </a>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-neutral-400">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span>© {new Date().getFullYear()} DEEP WORK.</span>
-            <span>Crafted by <a href={brand.developer.github} target="_blank" rel="noopener noreferrer" className="text-neutral-200 hover:text-[#D4A373] underline decoration-neutral-700 underline-offset-4">{brand.developer.name}</a>.</span>
-            <span>Available for Android 7+. Zero trackers.</span>
-          </div>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-neutral-500">
+          <div>© {new Date().getFullYear()} DEEP WORK. Available on Google Play for Android 7+. Zero trackers.</div>
           <a
             href="#top"
             onClick={(e) => go(e)}
-            className="flex items-center gap-1.5 text-neutral-300 hover:text-[#D4A373] transition-colors"
+            className="text-neutral-400 hover:text-[#ffe6a7] transition-colors"
           >
-            <span>RETURN TO SUMMIT</span>
-            <span aria-hidden="true">↑</span>
+            Back to Top ↑
           </a>
         </div>
       </div>
