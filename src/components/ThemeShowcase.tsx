@@ -12,11 +12,11 @@ export function ThemeShowcase() {
   };
 
   return (
-    <section id="themes" className="relative bg-[#000000] text-white py-28 px-4 sm:px-6 border-t border-[#432818]/60 overflow-hidden">
+    <section id="themes" className="relative bg-[#000000] text-white py-28 px-4 sm:px-6 border-t border-[#432818]/60 overflow-hidden w-full max-w-full">
       {/* Morphing dynamic ambient backlight behind the phone */}
       <div
         aria-hidden="true"
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] blur-[150px] pointer-events-none opacity-20 transition-all duration-700 ease-out"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[650px] h-[350px] sm:h-[650px] blur-[100px] sm:blur-[150px] pointer-events-none opacity-20 transition-all duration-700 ease-out"
         style={{
           background: `radial-gradient(circle, ${activeTheme.accentColor} 0%, transparent 70%)`,
         }}
@@ -119,10 +119,10 @@ export function ThemeShowcase() {
                 href={brand.playStoreUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 rounded-full bg-[#bb9457] hover:bg-[#99582a] text-[#20130b] hover:text-white px-6 py-3 font-mono text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:shadow-[0_0_25px_rgba(187,148,87,0.6)] hover:scale-105 active:scale-95"
+                className="inline-flex max-w-full items-center justify-center text-center gap-2.5 rounded-full bg-[#bb9457] hover:bg-[#99582a] text-[#20130b] hover:text-white px-5 sm:px-6 py-3 font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:shadow-[0_0_25px_rgba(187,148,87,0.6)] hover:scale-105 active:scale-95"
               >
-                <GooglePlayIcon className="size-4" />
-                <span>Switch in App via Palette Icon</span>
+                <GooglePlayIcon className="size-4 shrink-0" />
+                <span className="truncate sm:whitespace-normal">Switch in App via Palette Icon</span>
               </a>
             </div>
           </div>

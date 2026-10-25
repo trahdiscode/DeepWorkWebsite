@@ -59,11 +59,10 @@ html.lenis body {
 }
 
 @layer base {
-  html,
-  body,
   *,
   *::before,
   *::after {
+    box-sizing: border-box;
     cursor: url('/cursor.png?v=2') 0 0, url('/cursor.svg?v=2') 0 0, auto !important;
   }
 
@@ -83,7 +82,11 @@ html.lenis body {
   html {
     -webkit-text-size-adjust: 100%;
     background: var(--color-void);
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
+
   body {
     margin: 0;
     background: var(--color-void);
@@ -91,8 +94,19 @@ html.lenis body {
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: clip;
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    position: relative;
   }
+
+  #root {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    position: relative;
+  }
+
   ::selection {
     background: rgba(212, 163, 115, 0.35);
     color: #ffffff;

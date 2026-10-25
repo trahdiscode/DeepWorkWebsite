@@ -62,7 +62,7 @@ function PillarGraphic({ step }: { step: string }) {
 
 export function CorePillars() {
   return (
-    <section id="features" className="relative bg-[#000000] text-white py-28 px-4 sm:px-6 border-t border-[#432818]/60">
+    <section id="features" className="relative bg-[#000000] text-white py-28 px-4 sm:px-6 border-t border-[#432818]/60 overflow-hidden w-full max-w-full">
       <div className="max-w-6xl mx-auto space-y-16">
         {/* Section Header */}
         <div className="max-w-2xl space-y-3">
@@ -83,7 +83,7 @@ export function CorePillars() {
           {corePillars.map((pillar) => (
             <div
               key={pillar.step}
-              className="rounded-2xl border border-[#432818] bg-gradient-to-b from-[#160e0a] to-[#0a0604] p-8 sm:p-10 flex flex-col justify-between transition-all duration-300 hover:border-[#bb9457]/70 hover:shadow-[0_0_30px_rgba(187,148,87,0.18)] group"
+              className="rounded-2xl border border-[#432818] bg-gradient-to-b from-[#160e0a] to-[#0a0604] p-6 sm:p-10 flex flex-col justify-between transition-all duration-300 hover:border-[#bb9457]/70 hover:shadow-[0_0_30px_rgba(187,148,87,0.18)] group"
             >
               {/* Card Header */}
               <div className="flex items-center justify-between pb-6 border-b border-[#432818]/60 mb-6">

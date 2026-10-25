@@ -107,7 +107,7 @@ export function AcousticShield() {
   }, [volume]);
 
   return (
-    <section id="sounds" className="relative bg-[#000000] text-white py-28 px-4 sm:px-6 border-t border-[#432818]/60">
+    <section id="sounds" className="relative bg-[#000000] text-white py-28 px-4 sm:px-6 border-t border-[#432818]/60 overflow-hidden w-full max-w-full">
       <audio ref={audioRef} preload="none" />
 
       <div className="max-w-6xl mx-auto space-y-12">
@@ -131,14 +131,14 @@ export function AcousticShield() {
         <div className="rounded-3xl border border-[#432818]/80 bg-[#140d09]/90 backdrop-blur-xl p-6 sm:p-10 space-y-8 shadow-2xl">
           {/* Status & Volume Strip */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#432818]/60 gap-4 font-mono text-xs">
-            <div className="flex items-center gap-3">
-              <span className={`size-2.5 rounded-full ${isPlaying ? 'bg-[#bb9457] animate-pulse' : 'bg-neutral-600'}`} />
-              <span className="text-white font-medium tracking-wider">
+            <div className="flex items-center gap-3 min-w-0">
+              <span className={`size-2.5 rounded-full shrink-0 ${isPlaying ? 'bg-[#bb9457] animate-pulse' : 'bg-neutral-600'}`} />
+              <span className="text-white font-medium tracking-wider text-[11px] sm:text-xs truncate">
                 {isPlaying ? `SYNTHESIZING: ${activeTrack?.toUpperCase()} FREQUENCY` : 'ENGINE STANDBY • SELECT A FREQUENCY'}
               </span>
             </div>
 
-            <div className="flex items-center gap-3 text-neutral-400">
+            <div className="flex items-center gap-3 text-neutral-400 shrink-0">
               <span className="text-[10px] uppercase">LEVEL:</span>
               <input
                 type="range"
@@ -147,7 +147,7 @@ export function AcousticShield() {
                 step="0.05"
                 value={volume}
                 onChange={(e) => setVolume(parseFloat(e.target.value))}
-                className="w-28 accent-[#bb9457] cursor-pointer"
+                className="w-24 sm:w-28 accent-[#bb9457] cursor-pointer"
                 aria-label="Volume slider"
               />
               <span className="w-8 text-right font-mono text-[#ffe6a7] text-[11px]">

@@ -17,9 +17,9 @@ export default function App() {
   }, [reduced]);
 
   return (
-    <>
+    <div className="relative w-full max-w-full overflow-x-hidden min-h-screen bg-black">
       <Header />
-      <main className="relative z-10">
+      <main className="relative z-10 w-full max-w-full overflow-x-hidden">
         <Hero />
         <ThemeShowcase />
         <CorePillars />
@@ -27,6 +27,6 @@ export default function App() {
         <DownloadSection />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

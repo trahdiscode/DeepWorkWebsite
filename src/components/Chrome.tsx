@@ -50,8 +50,8 @@ export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 text-white backdrop-blur-md bg-black/75 border-b border-[#432818]/60 transition-all">
-      <div className="flex items-center justify-between px-4 py-3.5 sm:px-6 md:px-8 max-w-6xl mx-auto">
+    <header className="fixed inset-x-0 top-0 z-50 text-white backdrop-blur-md bg-black/75 border-b border-[#432818]/60 transition-all w-full max-w-full">
+      <div className="flex items-center justify-between px-4 py-3.5 sm:px-6 md:px-8 max-w-6xl mx-auto w-full">
         {/* Brand */}
         <a
           href="#top"
@@ -140,11 +140,11 @@ export function Header() {
 
 export function Footer() {
   return (
-    <footer className="border-t border-[#432818]/80 bg-[#000000] text-neutral-400 py-12 px-4 sm:px-6">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <footer className="border-t border-[#432818]/80 bg-[#000000] text-neutral-400 py-12 px-4 sm:px-6 overflow-hidden w-full max-w-full">
+      <div className="max-w-6xl mx-auto space-y-8 w-full">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-6 border-b border-[#432818]/40">
-          <div className="flex items-center gap-2.5">
-            <DeepWorkDiamond className="size-5 text-[#bb9457]" />
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+            <DeepWorkDiamond className="size-5 text-[#bb9457] shrink-0" />
             <span className="font-display text-sm tracking-[0.22em] font-bold text-white">
               {brand.wordmark}
             </span>
@@ -152,14 +152,14 @@ export function Footer() {
             <span className="text-xs font-mono text-neutral-400">Where silence meets absolute discipline.</span>
           </div>
 
-          <div className="flex items-center gap-5 font-mono text-xs">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-5 font-mono text-xs">
             <a
               href={brand.developer.github}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-neutral-300 hover:text-[#ffe6a7] transition-colors"
             >
-              <GitHubIcon className="size-4" />
+              <GitHubIcon className="size-4 shrink-0" />
               <span>{brand.developer.name}</span>
             </a>
             <span className="text-[#99582a]">·</span>
@@ -174,12 +174,12 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-neutral-500">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-[11px] text-neutral-500 text-center sm:text-left">
           <div>© {new Date().getFullYear()} DEEP WORK. Available on Google Play for Android 7+. Zero trackers.</div>
           <a
             href="#top"
             onClick={(e) => go(e)}
-            className="text-neutral-400 hover:text-[#ffe6a7] transition-colors"
+            className="text-neutral-400 hover:text-[#ffe6a7] transition-colors whitespace-nowrap"
           >
             Back to Top ↑
           </a>
