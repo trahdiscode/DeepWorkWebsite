@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <style>
+    .cursor-fill { fill: #3B2219; }
+    .cursor-outline { stroke: #FFFFFF; stroke-width: 1.8; stroke-linejoin: round; stroke-linecap: round; fill: #3B2219; }
+  </style>
+  <path class="cursor-outline" d="M 3 2 L 3 24.5 L 9.2 19 L 14.2 30 L 18.5 28.1 L 13.5 17.5 L 21 17.5 Z" />
+</svg>

@@ -27,10 +27,34 @@ export function AcousticShield() {
     };
     window.addEventListener('resize', onResize);
 
+    // Floating harmonic resonance motes
+    const motes = Array.from({ length: 24 }).map(() => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      size: 1 + Math.random() * 2,
+      speedY: 0.3 + Math.random() * 0.7,
+      alpha: 0.2 + Math.random() * 0.5,
+    }));
+
     let phase = 0;
     const render = () => {
       phase += isPlaying ? 0.08 : 0.015;
       ctx.clearRect(0, 0, width, height);
+
+      // Render floating audio motes when playing
+      if (isPlaying) {
+        motes.forEach((m) => {
+          m.y -= m.speedY;
+          if (m.y < 0) {
+            m.y = height;
+            m.x = Math.random() * width;
+          }
+          ctx.beginPath();
+          ctx.arc(m.x, m.y, m.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(187, 148, 87, ${m.alpha * volume})`;
+          ctx.fill();
+        });
+      }
 
       const amp = isPlaying ? 28 * volume : 4;
       const centerY = height / 2;
@@ -46,7 +70,7 @@ export function AcousticShield() {
         ctx.beginPath();
         ctx.strokeStyle = line.color;
         ctx.lineWidth = line.width;
-        ctx.shadowBlur = isPlaying ? 10 : 0;
+        ctx.shadowBlur = isPlaying ? 12 : 0;
         ctx.shadowColor = line.color;
 
         for (let x = 0; x < width; x += 4) {
@@ -145,7 +169,7 @@ export function AcousticShield() {
           {/* Status & Volume Strip */}
           <div className={`flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b gap-4 font-mono text-xs ${isLight ? 'border-[#bb9457]/20' : 'border-[#432818]/60'}`}>
             <div className="flex items-center gap-3 min-w-0">
-              <span className={`size-2.5 rounded-full shrink-0 ${isPlaying ? 'bg-[#bb9457] animate-pulse' : 'bg-neutral-600'}`} />
+              <span className={`size-2.5 rounded-full shrink-0 ${isPlaying ? 'bg-[#bb9457] shadow-[0_0_8px_rgba(187,148,87,0.8)] animate-pulse' : 'bg-neutral-600'}`} />
               <span className={`font-medium tracking-wider text-[11px] sm:text-xs truncate ${isLight ? 'text-[#20130b]' : 'text-white'}`}>
                 {isPlaying ? `SYNTHESIZING: ${activeTrack?.toUpperCase()} FREQUENCY` : 'ENGINE STANDBY • SELECT A FREQUENCY'}
               </span>
@@ -183,14 +207,14 @@ export function AcousticShield() {
                   key={track.id}
                   type="button"
                   onClick={() => toggleTrack(track.id)}
-                  className={`text-left p-5 rounded-2xl border transition-all duration-300 group ${
+                  className={`text-left p-5 rounded-2xl border transition-colors duration-200 group cursor-pointer ${
                     isActive
                       ? isLight
-                        ? 'border-[#6f1d1b] bg-[#ffe6a7]/35 shadow-[0_4px_25px_rgba(111,29,27,0.12)] scale-102'
-                        : 'border-[#bb9457] bg-[#bb9457]/20 shadow-[0_0_25px_rgba(187,148,87,0.3)] scale-102'
+                        ? 'border-[#6f1d1b] bg-[#ffe6a7]/35 shadow-[0_4px_25px_rgba(111,29,27,0.12)]'
+                        : 'border-[#bb9457] bg-[#bb9457]/20 shadow-[0_0_25px_rgba(187,148,87,0.3)]'
                       : isLight
-                      ? 'border-[#bb9457]/20 bg-[#faf7f2] hover:border-[#bb9457]/60 hover:bg-white shadow-sm hover:scale-101'
-                      : 'border-[#432818]/60 bg-[#1c120c]/60 hover:border-[#bb9457]/50 hover:bg-[#1c120c] hover:scale-101'
+                      ? 'border-[#bb9457]/20 bg-[#faf7f2] hover:border-[#bb9457]/60 hover:bg-white shadow-sm'
+                      : 'border-[#432818]/60 bg-[#1c120c]/60 hover:border-[#bb9457]/50 hover:bg-[#1c120c]'
                   }`}
                 >
                   <div className={`flex items-center justify-between text-[10px] font-mono mb-2.5 ${isLight ? 'text-[#6b584c]' : 'text-neutral-400'}`}>
@@ -213,15 +237,25 @@ export function AcousticShield() {
                     <span className={`font-medium transition-colors ${isLight ? 'text-[#432818] group-hover:text-[#6f1d1b]' : 'text-[#bb9457] group-hover:text-[#ffe6a7]'}`}>
                       {isActive ? 'Pause Soundscape' : 'Engage Freq'}
                     </span>
-                    <span
-                      className={`size-6 rounded-full flex items-center justify-center text-[11px] transition-colors ${
-                        isLight
-                          ? 'bg-[#432818]/10 text-[#432818] group-hover:bg-[#432818] group-hover:text-white'
-                          : 'bg-white/10 text-white group-hover:bg-[#bb9457] group-hover:text-[#20130b]'
-                      }`}
-                    >
-                      {isActive ? '❚❚' : '▶'}
-                    </span>
+                    
+                    {/* Equalizer indicator when active or play glyph */}
+                    {isActive ? (
+                      <div className="flex items-end gap-1 h-4 px-1">
+                        <span className="w-1 bg-[#bb9457] h-3 animate-pulse rounded-full" />
+                        <span className="w-1 bg-[#ffe6a7] h-4 animate-bounce rounded-full" />
+                        <span className="w-1 bg-[#bb9457] h-2 animate-pulse rounded-full" />
+                      </div>
+                    ) : (
+                      <span
+                        className={`size-6 rounded-full flex items-center justify-center text-[11px] transition-colors duration-200 ${
+                          isLight
+                            ? 'bg-[#432818]/10 text-[#432818] group-hover:bg-[#432818] group-hover:text-white'
+                            : 'bg-white/10 text-white group-hover:bg-[#bb9457] group-hover:text-[#20130b]'
+                        }`}
+                      >
+                        ▶
+                      </span>
+                    )}
                   </div>
                 </button>
               );

@@ -1,4 +1,4 @@
-import { useState, type MouseEvent } from 'react';
+import { useState, useEffect, type MouseEvent } from 'react';
 import { brand, nav } from '../content';
 import { scrollToHash } from '../lib/scroll';
 import { useTheme } from '../context/ThemeContext';
@@ -29,7 +29,7 @@ export function DeepWorkLogo({
     >
       <svg viewBox="0 0 108 108" aria-hidden="true" className="w-full h-full overflow-visible">
         {/* Subtle ambient diamond aura */}
-        <path d="M 54,20 L 88,54 L 54,88 L 20,54 Z" fill="rgba(187, 148, 87, 0.25)" />
+        <path d="M 54,20 L 88,54 L 54,88 L 20,54 Z" fill="rgba(187, 148, 87, 0.25)" className="animate-pulse" />
 
         {/* Outer geometric focus diamond with crisp gradient */}
         <path
@@ -120,14 +120,27 @@ export function GitHubIcon({ className = '' }: { className?: string }) {
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { isLight, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 backdrop-blur-md transition-all duration-300 w-full max-w-full ${
-        isLight
-          ? 'bg-[#faf7f2]/90 border-b border-[#bb9457]/25 text-[#20130b] shadow-[0_4px_25px_rgba(67,40,24,0.05)]'
-          : 'bg-black/75 border-b border-[#432818]/60 text-white'
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 w-full max-w-full ${
+        scrolled
+          ? isLight
+            ? 'bg-[#faf7f2]/95 backdrop-blur-md border-b border-[#bb9457]/30 text-[#20130b] shadow-[0_4px_25px_rgba(67,40,24,0.08)]'
+            : 'bg-black/85 backdrop-blur-md border-b border-[#bb9457]/30 text-white shadow-[0_4px_30px_rgba(0,0,0,0.8)]'
+          : isLight
+          ? 'bg-[#faf7f2]/70 backdrop-blur-sm border-b border-transparent text-[#20130b]'
+          : 'bg-transparent backdrop-blur-[2px] border-b border-transparent text-white'
       }`}
     >
       <div className="flex items-center justify-between px-4 py-3.5 sm:px-6 md:px-8 max-w-6xl mx-auto w-full">
@@ -138,7 +151,7 @@ export function Header() {
           className="flex items-center gap-2.5 sm:gap-3 group"
           aria-label={`${brand.name} — back to top`}
         >
-          <DeepWorkLogo className="size-7 sm:size-8 group-hover:scale-105 transition-transform" isLight={isLight} />
+          <DeepWorkLogo className="size-7 sm:size-8 transition-transform" isLight={isLight} />
           <span
             className={`font-display text-sm tracking-[0.24em] font-bold transition-colors ${
               isLight ? 'text-[#20130b] group-hover:text-[#6f1d1b]' : 'text-white group-hover:text-[#ffe6a7]'
@@ -167,7 +180,7 @@ export function Header() {
           <button
             type="button"
             onClick={toggleTheme}
-            className={`flex items-center gap-2 rounded-full px-3 py-1.5 font-mono text-xs font-semibold uppercase tracking-wider transition-all duration-300 border ${
+            className={`flex items-center gap-2 rounded-full px-3 py-1.5 font-mono text-xs font-semibold uppercase tracking-wider transition-colors duration-200 border cursor-pointer group ${
               isLight
                 ? 'border-[#bb9457]/40 bg-[#bb9457]/15 text-[#432818] hover:bg-[#bb9457]/30 shadow-sm'
                 : 'border-[#432818] bg-black/60 text-[#ffe6a7] hover:border-[#bb9457]/50 hover:bg-[#140d09]'
@@ -177,12 +190,12 @@ export function Header() {
           >
             {isLight ? (
               <>
-                <MoonIcon className="size-3.5 text-[#6f1d1b]" />
+                <MoonIcon className="size-3.5 text-[#6f1d1b] transition-transform duration-500 ease-out group-hover:rotate-45" />
                 <span className="text-[11px]">Dark Mode</span>
               </>
             ) : (
               <>
-                <SunIcon className="size-3.5 text-[#ffe6a7]" />
+                <SunIcon className="size-3.5 text-[#ffe6a7] transition-transform duration-500 ease-out group-hover:rotate-90" />
                 <span className="text-[11px]">Light Mode</span>
               </>
             )}
@@ -192,14 +205,15 @@ export function Header() {
             href={brand.playStoreUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`flex items-center gap-2 rounded-full px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+            className={`relative overflow-hidden group flex items-center gap-2 rounded-full px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider transition-colors duration-200 ${
               isLight
                 ? 'bg-[#432818] hover:bg-[#20130b] text-[#ffe6a7] hover:text-white shadow-[0_4px_18px_rgba(67,40,24,0.18)]'
-                : 'bg-[#bb9457] hover:bg-[#99582a] text-[#432818] hover:text-[#ffe6a7] shadow-[0_0_20px_rgba(187,148,87,0.3)]'
+                : 'bg-[#bb9457] hover:bg-[#99582a] text-[#432818] hover:text-[#ffe6a7]'
             }`}
           >
-            <GooglePlayIcon className="size-3.5" />
-            <span>Google Play</span>
+            <span className="shimmer-gleam" />
+            <GooglePlayIcon className="size-3.5 relative z-10" />
+            <span className="relative z-10">Google Play</span>
           </a>
         </nav>
 
